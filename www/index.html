@@ -5,12 +5,26 @@
         <meta name="viewport" content="initial-scale=1, maximumscale=1, user-scalable=no, width=device-width">
         <title>Mobile Computing &amp; IoT - WebApp</title>
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
     </head>
     <body>
         
-        <div id="map"></div>
+        <div data-role="page" id="main">
+            <div data-role="header" data-position="fixed">
+                <h1>Welcome</h1>
+            </div>
+            <div data-role="main" class="">
+                Some Sort of text
+                <div id="map"></div>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                
+            </div>
+        </div>
 
+        <script src="jq/jquery-1.11.1.js"></script>
+        <script type="text/javascript" src="jqm/jquery.mobile-1.4.5.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=googleApiLoaded" async defer></script>
     </body>
 </html>

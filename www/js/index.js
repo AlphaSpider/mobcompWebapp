@@ -3,6 +3,12 @@ var map;
 var currLocation;
 var destLocation;
 
+function googleApiLoaded() {
+    console.log("Google API has been loaded.");
+}
+
+
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
