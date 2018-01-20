@@ -42,3 +42,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                             'Error: Your browser doesn\'t support geolocation.');
 }
 
+function showAddress() {
+	$("addressInputPanel").panel("open", null);
+	$("address").val("");
+}
+
+function closeAddress() {
+	$("addressInputPanel").panel("close");
+	var address = $().val();
+}
+

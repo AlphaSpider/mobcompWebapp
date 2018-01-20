@@ -8,19 +8,64 @@
         <link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
     </head>
     <body>
-        
+		
+		<!--
+		Page 
+		@ID: main
+		-->
         <div data-role="page" id="main">
-            <div data-role="header" data-position="fixed">
+			<!-- 
+			Panel
+			@ID: addressInputPanel
+			Panel shows  
+			-->
+			<div data-role="panel" id="addressInputPanel" data-position-fixed="true" data-display="overlay">
+				<div class="panelContent">
+					<a href="#" data-role="button" data-icon="close" rel="external" onClick="closeAddress">Close</a>
+					<label for="address">Address Input:</label>
+					<input id="address" name="Address" type="text" value="" data-clear-btn="true">
+					<a href="#" data-role="button">Find on Map</a>
+				</div>
+			</div>
+			
+			<div data-role="header" data-position="fixed">
                 <h1>Welcome</h1>
+				<a href="#" data-role="button" class="ui-btn-right" data-icon="search" data-iconpos="notext" rel="external" onClick="showAddress"></a>
             </div>
             <div data-role="main" class="">
-                Some Sort of text
+                <label for="map">Choose your Destination:</label>
                 <div id="map"></div>
             </div>
             <div data-role="footer" data-position="fixed">
                 
             </div>
         </div>
+		
+		<!--
+		Page
+		@ID: compassPage
+		-->
+		<div data-role="page" id="compassPage">
+			<div data-role="header" data-position="fixed">
+			</div>
+			<div data-role="main" class="ui-content">
+			</div>
+			<div data-role="footer" data-position="fixed">
+			</div>
+		</div>
+		
+		<!--
+		Page
+		@ID: augmentedPage
+		-->
+		<div data-role="page" id="augmentedPage">
+			<div data-role="header" data-position="fixed">
+			</div>
+			<div data-role="main" class="ui-content">
+			</div>
+			<div data-role="footer" data-position="fixed">
+			</div>
+		</div>
 
         <script src="jq/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="jqm/jquery.mobile-1.4.5.js"></script>
