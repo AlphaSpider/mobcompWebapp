@@ -19,25 +19,26 @@
 			@ID: addressInputPanel
 			Panel shows  
 			-->
-			<div data-role="panel" id="addressInputPanel" data-position-fixed="true" data-display="overlay">
+			<div data-role="panel" id="addressInputPanel" data-position-fixed="true" data-position="right" data-display="overlay">
 				<div class="panelContent">
-					<a href="#" data-role="button" data-icon="close" rel="external" onClick="closeAddress">Close</a>
 					<label for="address">Address Input:</label>
-					<input id="address" name="Address" type="text" value="" data-clear-btn="true">
-					<a href="#" data-role="button">Find on Map</a>
+					<input id="address" name="Address" type="text" value="" placeholder="Type in Address" data-clear-btn="true">
+					<label id="addressError" class="error-text"></label>
+					<a id="findOnMapBtn" href="#" data-role="button">Find on Map</a>
 				</div>
 			</div>
 			
 			<div data-role="header" data-position="fixed">
                 <h1>Welcome</h1>
-				<a href="#" data-role="button" class="ui-btn-right" data-icon="search" data-iconpos="notext" rel="external" onClick="showAddress"></a>
+				<a id="addressInputBtn" href="#" data-role="button" class="ui-btn-right" data-icon="search" data-iconpos="notext" rel="external"></a>
             </div>
             <div data-role="main" class="">
                 <label for="map">Choose your Destination:</label>
                 <div id="map"></div>
             </div>
             <div data-role="footer" data-position="fixed">
-                
+                <!-- Button for the navigation start -->
+				
             </div>
         </div>
 		
