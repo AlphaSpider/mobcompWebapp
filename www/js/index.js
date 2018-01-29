@@ -4,7 +4,9 @@ var currLocation;
 var currMarker;
 var destLocation;
 var destMarker;
+var currDistance;
 var lastAddressInput; 
+var distanceThreshold = 
 var API_KEY = 0;
 
 function googleApiLoaded() {
@@ -14,7 +16,7 @@ function googleApiLoaded() {
 // init some values befor everything starts
 $(document).ready(function() {
 	
-	
+	//TODO: Add to "rescaling/multi-device"
 	// calc height for addressInputPanel
 	var headerHeight = $("[data-role=header]").outerHeight();
 	var newPanelHeight = $(".ui-panel").height() - headerHeight;
@@ -128,7 +130,38 @@ $("#findOnMapBtn").click(function () {
 	}
 });
 
-function getOrientationDistance(lat1, long1, lat2, long2) {
+$("#compassPage").on("pageCreate", function () {
+	// 1. init location update
+	navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
+	// 2. init compass update
+	
+	
+});
+
+function updatePosition(pos) {
+	// check what navigator watchPosition returns
+	currLocation = pos;
+	var newDist = calcDistanceLatLong(
+					currLocation.coords.latitude, 
+					currLocation.coords.longitude,
+					destLocation.coords.latitude,
+					destLocation.coords.longitude);
+	// check if Destination is reached
+	if((currDistance - newDist) < distanceThreshold ) {
+		// TODO
+		// destination reached, end navigation
+		// and update UI
+	} else 
+		//TODO
+		// show distance in UI
+	}	
+}
+
+function failedPosUpdate() {
+	alert("Position could not be updated!");
+}
+
+function calcDistanceLatLong(lat1, long1, lat2, long2) {
 	var lat = (lat1 + lat2) / 2 * (Math.PI / 180);
 
 	var distance = Math.sqrt(Math.pow(111.3 * Math.cos(lat) * (long1 - long2), 2) + Math.pow(111.3 * (lat1 - lat2), 2));
@@ -151,6 +184,6 @@ function getOrientationDegrees(lat1, long1, lat2, long2){
 		deg = 360 - Math.abs(deg);
 	}
 
-	return 360 - deg;
+	return Math.round(360 - deg);
 }
 
