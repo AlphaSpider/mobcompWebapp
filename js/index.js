@@ -261,10 +261,10 @@ function updatePosition(pos) {
 
 function updateCompass(event) {
 	var rot = getOrientationDegrees(
-				currLocation.latitude, 
-				currLocation.longitude,
-				destLocation.latitude,
-				destLocation.longitude) - (event.webkitCompassHeading); 
+				currLocation.lat, 
+				currLocation.lng,
+				destLocation.lat,
+				destLocation.lng) - (event.webkitCompassHeading); 
 	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
 	console.log("[updateCompass]: rotation = " + rot);
 	
