@@ -14,7 +14,7 @@ var destLocation;
 var currDistance;
 var lastAddressInput; 
 var distanceThreshold = 10;
-
+var navigatorHandlerID = 0;
 
 function googleApiLoaded() {
     console.log("Google API has been loaded.");
@@ -147,9 +147,9 @@ $("#findOnMapBtn").click(function () {
 	}
 });
 
-$("#").on("click", function() {
+$("#endNavBtn").on("click", function() {
 	// prepare navigation
-	
+	endNavigation();
 });
 
 
@@ -159,9 +159,18 @@ $("#compassPage").on("pageCreate", function () {
 
 function initNavigation() {
 	// 1. init location update
-	navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
+	navigatorHandlerID = navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
+	console.log("[initNavigation]: navigatorHandlerID = " + navigatorHandlerID);
 	// 2. init compass update
-	window.addEventListener("deviceorientation", updateCompass());
+	$(window).on("deviceorientation", updateCompass);
+}
+
+function endNavigation() {
+	// 1. remove watchPosition update from navigator
+	navigator.geolocation.clearWatch(navigatorHandlerID);
+	// 2. stop compass updates
+	$(window).off("deviceorientation");
+	
 }
 
 function updatePosition(pos) {
@@ -177,9 +186,11 @@ function updatePosition(pos) {
 		// TODO
 		// destination reached, end navigation
 		// and update UI
+		endNavigation();
 	} else {
-		//TODO
 		// show distance in UI
+		$("#unit").html("[meter]");
+		$("#distance").html(newDist);
 	}	
 }
 
@@ -195,6 +206,9 @@ function failedPosUpdate() {
 	alert("Position could not be updated!");
 }
 
+/*
+* Returns distance in meters.
+*/
 function calcDistanceLatLong(lat1, long1, lat2, long2) {
 	var lat = (lat1 + lat2) / 2 * (Math.PI / 180);
 
