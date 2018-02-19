@@ -4,6 +4,7 @@ var isPanorama = false;
 $("#compassPage").on("pagebeforeshow", function () {
     scaleCompass();
 });
+$("#main").on("pagebeforeshow", scaleContent());
 
 $(window).on("orientationchange", function() {
     scaleContent();
@@ -32,6 +33,12 @@ function scaleCompass() {
         });
         console.log("[compassPage.pagebeforeload]: new compass height = " + tempNewHeight);
         // 2. scale Compass
+		$(".custom-compass-pos").css({
+			//TODO
+		});
+		$(".custom-compass-circle").css({
+			// TODO
+		});
     }
 }
 
@@ -43,13 +50,12 @@ function scaleContent() {
 	var newPanelHeight = $(".ui-panel").height() - headerHeight;
 	$(".ui-panel").css({
 		'top': headerHeight,
-		'min-height': newPanelHeight,
-		'z-index': 1002
+		'min-height': newPanelHeight
 	});
 	// 2. calc hight for map
 	// window.height - header 
 	var windowHeight = $(window).height();
-	var mapHeight = windowHeight - headerHeight;
+	var mapHeight = windowHeight - headerHeight - (windowHeight - Math.floor($("#startNavBtn").offset().top) + 3);
 	console.log("[scaleContent]: "
 				+ " windowHeight = " + windowHeight
 				+ " mapHeight = " + mapHeight);

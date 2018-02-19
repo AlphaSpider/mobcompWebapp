@@ -32,15 +32,20 @@ $(document).ready(function() {
 		'top': headerHeight,
 		'min-height': newPanelHeight
 	});
+	
+	// show LOADER view
+	showLoadingView();
 }); 
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 12
+        center: {lat: 51.005665, lng: 10.505793},
+        zoom: 6
     });
-	infoWindow = new google.maps.InfoWindow({map: map});
-    currMarker = new google.maps.Marker({map: map});
+	if(infoWindow == null)
+		infoWindow = new google.maps.InfoWindow({map: map});
+	if(currMarker == null)
+		currMarker = new google.maps.Marker({map: map});
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var pos = {
@@ -52,8 +57,11 @@ function initMap() {
             currLocation = pos;
             infoWindow.setContent('Location found.');
             map.setCenter(pos);
+			map.setZoom(12);
+			hideLoadingView();
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
+			hideLoadingView();
         });
 		// 1. add onClick to map
 		google.maps.event.addListener(map, "click", function(e) {
@@ -61,12 +69,22 @@ function initMap() {
 			if(destMarker == null)
 				destMarker = new google.maps.Marker({map: map});
 			destMarker.setPosition(e.latLng);
+			destLocation = {
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng()
+			};
 			infoWindow.setPosition(e.latLng);
 			infoWindow.setContent("Your destination");
+			console.log("[maps.onClick]: Destination Lat = " 
+						+ destLocation.lat
+						+ " Lng = " + destLocation.lng
+						+ " Start Lat = " + currLocation.lat
+						+ " Lng = " + currLocation.lng);
 		});
     } else {
         //browser does not support geolocation
 		alert("Browser does not support GPS");
+		hideLoadingView();
     }
 }
 
@@ -99,10 +117,9 @@ $("#findOnMapBtn").click(function () {
 				switch(status) {
 					case google.maps.GeocoderStatus.OK:
 						// ### 3. place marker on map and save position ###
-						destMarker = new google.maps.Marker({
-							map: map,
-							position: results[0].geometry.location
-						});
+						if(destMarker == null)
+							destMarker = new google.maps.Marker({map: map});
+						destMarker.setPosition(results[0].geometry.location);
 						map.setCenter(results[0].geometry.location);
 						$("#addressInputPanel").panel("close");
 						$("#address").val("");
@@ -147,15 +164,56 @@ $("#findOnMapBtn").click(function () {
 	}
 });
 
+$("#startNavBtn").on("click", function() {
+	// 1. check if a destination is set
+	if(destMarker == null) {
+		// show alert
+		alert("Your have to set a destination on the Map.");
+	} else {
+		// 2. if yes, switch to compassPage
+		$(":mobile-pagecontainer").pagecontainer("change", "#compassPage", {
+			transition: 'slide',
+			changeHash: false,
+			reverse: false,
+			showLoadMsg: true
+		});
+	}
+});
+
 $("#endNavBtn").on("click", function() {
 	// prepare navigation
 	endNavigation();
+	$(":mobile-pagecontainer").pagecontainer("change", "#main", {
+		transition: 'slide',
+		changeHash: false,
+		reverse: true,
+		showLoadMsg: true
+	});
+	initMap();
 });
 
 
-$("#compassPage").on("pageCreate", function () {
+$("#compassPage").on("pagebeforeshow", function () {
+	console.log("[compassPage.onPagebeforeshow]: initialize navigation.")
 	initNavigation();
 });
+
+function showLoadingView() {
+	$("#loadingScreen").show();
+	$.mobile.loading("show", {
+		text: "Loading API",
+		textVisible: true,
+		theme: "a",
+		textonly: false,
+		html: ""
+	});
+}
+
+function hideLoadingView() {
+	// close LOADER view
+	$("#loadingScreen").fadeOut();
+	$.mobile.loading("hide");
+}
 
 function initNavigation() {
 	// 1. init location update
@@ -170,7 +228,7 @@ function endNavigation() {
 	navigator.geolocation.clearWatch(navigatorHandlerID);
 	// 2. stop compass updates
 	$(window).off("deviceorientation");
-	
+	console.log("[endNavigation]: end navigation");
 }
 
 function updatePosition(pos) {
@@ -179,18 +237,25 @@ function updatePosition(pos) {
 	var newDist = calcDistanceLatLong(
 					currLocation.coords.latitude, 
 					currLocation.coords.longitude,
-					destLocation.coords.latitude,
-					destLocation.coords.longitude);
+					destLocation.lat,
+					destLocation.lng);
 	// check if Destination is reached
 	if((currDistance - newDist) < distanceThreshold ) {
 		// TODO
 		// destination reached, end navigation
 		// and update UI
 		endNavigation();
+		alert("Destination reached!");
 	} else {
 		// show distance in UI
-		$("#unit").html("[meter]");
-		$("#distance").html(newDist);
+		if(newDist > 2000) {
+			$("#unit").html("[km]");
+			$("#distance").html(Math.round(newDist / 1000));
+		} else {
+			$("#unit").html("[meter]");
+			$("#distance").html(newDist);
+		}
+
 	}	
 }
 
@@ -199,7 +264,10 @@ function updateCompass(event) {
 				currLocation.latitude, 
 				currLocation.longitude,
 				destLocation.latitude,
-				destLocation.longitude) - event.webkitCompassHeading; 
+				destLocation.longitude) - (event.webkitCompassHeading); 
+	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
+	console.log("[updateCompass]: rotation = " + rot);
+	
 }
 
 function failedPosUpdate() {
