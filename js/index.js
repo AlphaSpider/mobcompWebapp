@@ -13,7 +13,7 @@ var currLocation;
 var destLocation;
 var currDistance;
 var lastAddressInput; 
-var distanceThreshold = 10;
+var distanceThreshold = 15;
 var navigatorHandlerID = 0;
 
 function googleApiLoaded() {
@@ -38,10 +38,12 @@ $(document).ready(function() {
 }); 
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 51.005665, lng: 10.505793},
-        zoom: 6
-    });
+    if(map == null) {
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: {lat: 51.005665, lng: 10.505793},
+			zoom: 6
+		});
+	}
 	if(infoWindow == null)
 		infoWindow = new google.maps.InfoWindow({map: map});
 	if(currMarker == null)
@@ -51,7 +53,7 @@ function initMap() {
             var pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
-            }
+            };
             infoWindow.setPosition(pos);
             currMarker.setPosition(pos);
             currLocation = pos;
@@ -233,10 +235,13 @@ function endNavigation() {
 
 function updatePosition(pos) {
 	// check what navigator watchPosition returns
-	currLocation = pos;
+	currLocation = {
+		lat: pos.coords.latitude,
+		lng: pos.coords.longitude
+	};
 	var newDist = calcDistanceLatLong(
-					currLocation.coords.latitude, 
-					currLocation.coords.longitude,
+					currLocation.lat, 
+					currLocation.lng,
 					destLocation.lat,
 					destLocation.lng);
 	// check if Destination is reached
@@ -266,7 +271,9 @@ function updateCompass(event) {
 				destLocation.lat,
 				destLocation.lng) - (event.webkitCompassHeading); 
 	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
-	console.log("[updateCompass]: rotation = " + rot);
+	console.log("[updateCompass]: rotation = " + rot
+				+ " Curr[" + currLocation.lat + "|" + currLocation.lat + "] "
+				+ "Dest[" + destLocation.lat + "|" + destLocation.lng + "]");
 	
 }
 
