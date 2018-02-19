@@ -265,6 +265,8 @@ function updatePosition(pos) {
 }
 
 function updateCompass(event) {
+	
+	
 	var rot = getOrientationDegrees(
 				currLocation.lat, 
 				currLocation.lng,
