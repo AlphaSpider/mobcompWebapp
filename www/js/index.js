@@ -1,16 +1,24 @@
-
+/**
+* Google API global variables
+*/
 var map;
-var currLocation;
 var currMarker;
-var destLocation;
 var destMarker;
+var infoWindow;
+
+/**
+* Navigation global variables
+*/
+var currLocation;
+var destLocation;
 var currDistance;
 var lastAddressInput; 
-var distanceThreshold = 
-var API_KEY = 0;
+var distanceThreshold = 10;
+
 
 function googleApiLoaded() {
     console.log("Google API has been loaded.");
+	initMap();
 }
 
 // init some values befor everything starts
@@ -31,7 +39,7 @@ function initMap() {
         center: {lat: -34.397, lng: 150.644},
         zoom: 12
     });
-    var infoWindow = new google.maps.InfoWindow({map: map});
+	infoWindow = new google.maps.InfoWindow({map: map});
     currMarker = new google.maps.Marker({map: map});
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -47,9 +55,18 @@ function initMap() {
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
+		// 1. add onClick to map
+		google.maps.event.addListener(map, "click", function(e) {
+			// 1.1 new destination marker
+			if(destMarker == null)
+				destMarker = new google.maps.Marker({map: map});
+			destMarker.setPosition(e.latLng);
+			infoWindow.setPosition(e.latLng);
+			infoWindow.setContent("Your destination");
+		});
     } else {
         //browser does not support geolocation
-		console.log("Browser does not support Geolocation");
+		alert("Browser does not support GPS");
     }
 }
 
@@ -130,13 +147,22 @@ $("#findOnMapBtn").click(function () {
 	}
 });
 
+$("#").on("click", function() {
+	// prepare navigation
+	
+});
+
+
 $("#compassPage").on("pageCreate", function () {
+	initNavigation();
+});
+
+function initNavigation() {
 	// 1. init location update
 	navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
 	// 2. init compass update
-	
-	
-});
+	window.addEventListener("deviceorientation", updateCompass());
+}
 
 function updatePosition(pos) {
 	// check what navigator watchPosition returns
@@ -151,10 +177,18 @@ function updatePosition(pos) {
 		// TODO
 		// destination reached, end navigation
 		// and update UI
-	} else 
+	} else {
 		//TODO
 		// show distance in UI
 	}	
+}
+
+function updateCompass(event) {
+	var rot = getOrientationDegrees(
+				currLocation.latitude, 
+				currLocation.longitude,
+				destLocation.latitude,
+				destLocation.longitude) - event.webkitCompassHeading; 
 }
 
 function failedPosUpdate() {
@@ -186,4 +220,3 @@ function getOrientationDegrees(lat1, long1, lat2, long2){
 
 	return Math.round(360 - deg);
 }
-

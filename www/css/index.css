@@ -5,11 +5,60 @@ html, body{
 }
 
 #map {
-    height: 100%;
+	height: 400px;
+	width: 	49%;
+	margin-left: auto;
+	margin-right: auto;
+}
+#compassImg {
+	width: 200px;
+	height: 200px;
+}
+#distance{
+	font-weight: bold;
 }
 
 .error-text {
 	color: red;
+}
+
+.custom-distance-base-pos {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 100px;
+	width: 30%;
+	text-align: center;
+}
+
+.custom-circle{
+	position: relative;
+	border-radius: 50%;
+	width: 200px;
+	height: 200px;
+	background: black;
+
+}
+
+.custom-compass-base-pos {
+	width: 50%;
+	height: 100px;
+	margin-right: auto!important;
+	margin-left: auto!important;
+}
+
+.custom-compass-pos {
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 1003;
+}
+
+.custom-nav-btn-pos {
+	position: absolute!important;
+	bottom: 16px!important;
+	right: 16px!important;
+	z-index: 1001!important;
+	display: inline-block!important;
 }
 
 

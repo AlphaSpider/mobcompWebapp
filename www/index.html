@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
     </head>
     <body>
-		
+
 		<!--
 		Page 
 		@ID: main
@@ -17,11 +17,11 @@
 			<!-- 
 			Panel
 			@ID: addressInputPanel
-			Panel shows  
+			Panel shows map and let's the user choose a destination, where he wants to travel to.
 			-->
 			<div data-role="panel" id="addressInputPanel" data-position-fixed="true" data-position="right" data-display="overlay">
 				<div class="panelContent">
-					<label for="address">Address Input:</label>
+					<label for="address">Locate Adress:</label>
 					<input id="address" name="Address" type="text" value="" placeholder="Type in Address" data-clear-btn="true">
 					<label id="addressError" class="error-text"></label>
 					<a id="findOnMapBtn" href="#" data-role="button">Find on Map</a>
@@ -29,49 +29,45 @@
 			</div>
 			
 			<div data-role="header" data-position="fixed">
-                <h1>Welcome</h1>
+                <h1 class="custom-header-title">Select Destination</h1>
 				<a id="addressInputBtn" href="#" data-role="button" class="ui-btn-right" data-icon="search" data-iconpos="notext" rel="external"></a>
             </div>
             <div data-role="main" class="">
-                <label for="map">Choose your Destination:</label>
                 <div id="map"></div>
             </div>
-            <div data-role="footer" data-position="fixed">
-                <!-- Button for the navigation start -->
+			
+			<a id="startNavBtn" href="#compassPage" class="ui-btn ui-corner-all custom-nav-btn-pos">Start Navigation</a>
+			
+		</div>
 				
-            </div>
-        </div>
-		
 		<!--
 		Page
 		@ID: compassPage
 		-->
 		<div data-role="page" id="compassPage">
 			<div data-role="header" data-position="fixed">
+				<h1>Compass Navigation</h1>
 			</div>
 			<div data-role="main" class="ui-content">
-				<img id="compasImg" src="" alt="Compass Image">
+				
+				<div class="custom-compass-base-pos">
+					<div class="custom-compass-pos custom-circle">
+							<img id="compassImg" src="img/needle.png" alt="Compass Image">
+					</div>
+				</div>
+				<div class="custom-distance-base-pos">
+					<div>Distance: <span id="distance">-</span> <span id="unit">[m]</span></div>
+				</div>
 			</div>
 			<div data-role="footer" data-position="fixed">
 			</div>
+			<a id="endNavBtn" href="#main" class="ui-btn ui-corner-all custom-nav-btn-pos">Stop Navigation</a>
 		</div>
 		
-		<!--
-		Page
-		@ID: augmentedPage
-		-->
-		<div data-role="page" id="augmentedPage">
-			<div data-role="header" data-position="fixed">
-			</div>
-			<div data-role="main" class="ui-content">
-			</div>
-			<div data-role="footer" data-position="fixed">
-			</div>
-		</div>
-
-        <script src="jq/jquery-1.11.1.js"></script>
+		<script src="jq/jquery-1.11.1.js"></script>
+		<script src="js/scale.js"></script>
         <script type="text/javascript" src="jqm/jquery.mobile-1.4.5.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=googleApiLoaded" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=&callback=googleApiLoaded" async defer></script>
     </body>
 </html>
