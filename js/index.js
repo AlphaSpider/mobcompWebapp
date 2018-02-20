@@ -288,13 +288,16 @@ function updatePosition(pos) {
 }
 
 function updateCompass(event) {
+	if(event.originalEvent != null)
+		event = event.originalEvent;
+	
 	var rot = getOrientationDegrees(
 				currLocation.lat, 
 				currLocation.lng,
 				destLocation.lat,
 				destLocation.lng);
 				
-	if(event.absolute) {
+	if(event.absolute || event.alpha) {
 		console.log("[updateCompass]: absolut Support.");
 		rot -= event.alpha;
 				
