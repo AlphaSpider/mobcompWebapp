@@ -17,6 +17,7 @@ var lastAddressInput;
 var distanceThreshold = 15;
 var navigatorHandlerID = 0;
 
+
 function googleApiLoaded() {
     console.log("Google API has been loaded.");
 	initMap();
@@ -290,8 +291,8 @@ function updatePosition(pos) {
 function updateCompass(event) {
 	if(event.originalEvent != null)
 		event = event.originalEvent;
-	var deviceOrientOffset = 270.0; // on android 0Degree is West(270 Degree)
-	
+	var deviceOrientOffset = 90.0; // on android 0Degree is West(270 Degree) CCW
+
 	// offset due to degree from north orientation to destination.
 	var baseRot = getOrientationDegrees(
 				currLocation.lat, 
@@ -300,8 +301,9 @@ function updateCompass(event) {
 				destLocation.lng);
 				
 	if(event.absolute || event.alpha) {
+		var deviceRot = (360.0 - (event.alpha + deviceOrientOffset) % 360);
 		console.log("[updateCompass]: absolut Support.");
-		baseRot = baseRot + (deviceOrientOffset - event.alpha);
+		baseRot = baseRot - deviceRot;
 				
 	} else if(event.hasOwnProperty("webkitCompassHeading")) {
 		console.log("[updateCompass]: webkit support.");
@@ -325,7 +327,8 @@ function updateCompass(event) {
 			}
 		}
 	}
-
+	// add offset for the window orientation (+/- 90.0 deg)
+	baseRot -= window.orientation;
 	$("#compassImg").css("transform", "rotate(" + baseRot + "deg)");
 	console.log("[updateCompass]: rotation = " + baseRot
 				+ " Curr[" + currLocation.lat + "|" + currLocation.lng + "] "
