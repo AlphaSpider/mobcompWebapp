@@ -264,7 +264,7 @@ function updatePosition(pos) {
 					destLocation.lat,
 					destLocation.lng);
 	// check if Destination is reached
-	if((currDistance - newDist) < distanceThreshold ) {
+	if(newDist < distanceThreshold ) {
 		// TODO
 		// destination reached, end navigation
 		// and update UI
@@ -313,7 +313,7 @@ function updateCompass(event) {
 
 	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
 	console.log("[updateCompass]: rotation = " + rot
-				+ " Curr[" + currLocation.lat + "|" + currLocation.lat + "] "
+				+ " Curr[" + currLocation.lat + "|" + currLocation.lng + "] "
 				+ "Dest[" + destLocation.lat + "|" + destLocation.lng + "]"
 				+ "Last[" + lastCurrLocation.lat + "|" + lastCurrLocation.lng + "]");
 }
