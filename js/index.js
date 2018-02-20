@@ -11,6 +11,7 @@ var infoWindow;
 */
 var currLocation;
 var destLocation;
+var lastCurrLocation;
 var currDistance;
 var lastAddressInput; 
 var distanceThreshold = 15;
@@ -222,7 +223,23 @@ function initNavigation() {
 	navigatorHandlerID = navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
 	console.log("[initNavigation]: navigatorHandlerID = " + navigatorHandlerID);
 	// 2. init compass update
-	$(window).on("deviceorientation", updateCompass);
+	if("ondeviceorientationabsolte" in window) {
+		$(window).on("deviceorientationabsolute", updateCompass);
+	} else if ("ondeviceorientation" in window) {
+		$(window).on("deviceorientation", updateCompass);
+	} else {
+		// event is not supported
+		alert("An Event is not supported by this browser. Website could not work without it.");
+		// end navigation
+		endNavigation();
+		// move back to map view
+		$(":mobile-pagecontainer").pagecontainer("change", "#main", {
+			transition: 'slide',
+			changeHash: false,
+			reverse: true,
+			showLoadMsg: true
+		});
+	}
 }
 
 function endNavigation() {
@@ -234,6 +251,7 @@ function endNavigation() {
 }
 
 function updatePosition(pos) {
+	currLastLocation = currLocation;
 	// check what navigator watchPosition returns
 	currLocation = {
 		lat: pos.coords.latitude,
@@ -252,6 +270,8 @@ function updatePosition(pos) {
 		endNavigation();
 		alert("Destination reached!");
 	} else {
+		// update current distance
+		currDistance = newDist;
 		// show distance in UI
 		if(newDist > 2000) {
 			$("#unit").html("[km]");
@@ -269,12 +289,32 @@ function updateCompass(event) {
 				currLocation.lat, 
 				currLocation.lng,
 				destLocation.lat,
-				destLocation.lng) - (event.webkitCompassHeading); 
+				destLocation.lng);
+				
+	if(event.absolute) {
+		console.log("[updateCompass]: absolut Support.");
+		rot -= event.alpha;
+				
+	} else if(event.hasOwnProperty("webkitCompassHeading")) {
+		console.log("[updateCompass]: webkit support.");
+			rot -= (360 - event.webkitCompassHeading)); 
+	} else {
+		console.log("[updateCompass]: backup solution");
+		// asume, user is holding the phone in moving-direction
+		// calculate the compass orientation based on the previous location
+		var tempRot = getOrientationDegrees(
+						lastCurrLocation.lat,
+						lastCurrLocation.lng,
+						currLocation.lat,
+						currLocation.lng);
+		rot -= tempRot;
+	}
+
 	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
 	console.log("[updateCompass]: rotation = " + rot
 				+ " Curr[" + currLocation.lat + "|" + currLocation.lat + "] "
-				+ "Dest[" + destLocation.lat + "|" + destLocation.lng + "]");
-	
+				+ "Dest[" + destLocation.lat + "|" + destLocation.lng + "]"
+				+ "Last[" + lastCurrLocation.lat + "|" + lastCurrLocation.lng + "]");
 }
 
 function failedPosUpdate() {
@@ -307,5 +347,5 @@ function getOrientationDegrees(lat1, long1, lat2, long2){
 		deg = 360 - Math.abs(deg);
 	}
 
-	return Math.round(360 - deg);
+	return deg;
 }
