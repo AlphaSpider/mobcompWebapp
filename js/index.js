@@ -301,33 +301,33 @@ function updateCompass(event) {
 				
 	if(event.absolute || event.alpha) {
 		console.log("[updateCompass]: absolut Support.");
-		rot = rot + (deviceOrientOffset - event.alpha);
+		baseRot = baseRot + (deviceOrientOffset - event.alpha);
 				
 	} else if(event.hasOwnProperty("webkitCompassHeading")) {
 		console.log("[updateCompass]: webkit support.");
-			rot -= (360 - event.webkitCompassHeading); 
+			baseRot -= (360 - event.webkitCompassHeading); 
 	} else {
 		console.log("[updateCompass]: backup solution");
 		// asume, user is holding the phone in moving-direction
 		// calculate the compass orientation based on the previous location
 		if(currLocation == lastCurrLocation) {
-			rot -= 180.0;
+			baseRot -= 180.0;
 		} else {
 			var tempRot = getOrientationDegrees(
 				lastCurrLocation.lat,
 				lastCurrLocation.lng,
 				currLocation.lat,
 				currLocation.lng);
-			if(tempRot >= rot) {
-				rot += (360.0 - tempRot);
+			if(tempRot >= baseRot) {
+				baseRot += (360.0 - tempRot);
 			} else {
-				rot = tempRot - rot;
+				baseRot = tempRot - baseRot;
 			}
 		}
 	}
 
-	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
-	console.log("[updateCompass]: rotation = " + rot
+	$("#compassImg").css("transform", "rotate(" + baseRot + "deg)");
+	console.log("[updateCompass]: rotation = " + baseRot
 				+ " Curr[" + currLocation.lat + "|" + currLocation.lng + "] "
 				+ "Dest[" + destLocation.lat + "|" + destLocation.lng + "]"
 				+ "Last[" + lastCurrLocation.lat + "|" + lastCurrLocation.lng + "]");
