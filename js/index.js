@@ -222,6 +222,7 @@ function initNavigation() {
 	// 1. init location update
 	navigatorHandlerID = navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
 	console.log("[initNavigation]: navigatorHandlerID = " + navigatorHandlerID);
+	lastCurrLocation = currLocation;
 	// 2. init compass update
 	if("ondeviceorientationabsolte" in window) {
 		$(window).on("deviceorientationabsolute", updateCompass);
@@ -297,7 +298,7 @@ function updateCompass(event) {
 				
 	} else if(event.hasOwnProperty("webkitCompassHeading")) {
 		console.log("[updateCompass]: webkit support.");
-			rot -= (360 - event.webkitCompassHeading)); 
+			rot -= (360 - event.webkitCompassHeading); 
 	} else {
 		console.log("[updateCompass]: backup solution");
 		// asume, user is holding the phone in moving-direction
