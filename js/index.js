@@ -225,8 +225,10 @@ function initNavigation() {
 	lastCurrLocation = currLocation;
 	// 2. init compass update
 	if("ondeviceorientationabsolte" in window) {
+		console.log("[ONdeviceorientation]");
 		$(window).on("deviceorientationabsolute", updateCompass);
 	} else if ("ondeviceorientation" in window) {
+		console.log("[deviceorientation]");
 		$(window).on("deviceorientation", updateCompass);
 	} else {
 		// event is not supported
@@ -303,12 +305,20 @@ function updateCompass(event) {
 		console.log("[updateCompass]: backup solution");
 		// asume, user is holding the phone in moving-direction
 		// calculate the compass orientation based on the previous location
-		var tempRot = getOrientationDegrees(
-						lastCurrLocation.lat,
-						lastCurrLocation.lng,
-						currLocation.lat,
-						currLocation.lng);
-		rot -= tempRot;
+		if(currLocation == lastCurrLocation) {
+			rot -= 180.0;
+		} else {
+			var tempRot = getOrientationDegrees(
+				lastCurrLocation.lat,
+				lastCurrLocation.lng,
+				currLocation.lat,
+				currLocation.lng);
+			if(tempRot >= rot) {
+				rot += (360.0 - tempRot);
+			} else {
+				rot = tempRot - rot;
+			}
+		}
 	}
 
 	$("#compassImg").css("transform", "rotate(" + rot + "deg)");
