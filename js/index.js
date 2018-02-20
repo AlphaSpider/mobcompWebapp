@@ -290,8 +290,10 @@ function updatePosition(pos) {
 function updateCompass(event) {
 	if(event.originalEvent != null)
 		event = event.originalEvent;
+	var deviceOrientOffset = 270.0; // on android 0Degree is West(270 Degree)
 	
-	var rot = getOrientationDegrees(
+	// offset due to degree from north orientation to destination.
+	var baseRot = getOrientationDegrees(
 				currLocation.lat, 
 				currLocation.lng,
 				destLocation.lat,
@@ -299,7 +301,7 @@ function updateCompass(event) {
 				
 	if(event.absolute || event.alpha) {
 		console.log("[updateCompass]: absolut Support.");
-		rot -= event.alpha;
+		rot = rot + (deviceOrientOffset - event.alpha);
 				
 	} else if(event.hasOwnProperty("webkitCompassHeading")) {
 		console.log("[updateCompass]: webkit support.");
