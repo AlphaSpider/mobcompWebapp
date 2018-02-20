@@ -361,5 +361,5 @@ function getOrientationDegrees(lat1, long1, lat2, long2){
 		deg = 360 - Math.abs(deg);
 	}
 
-	return deg;
+	return 360 - deg;
 }
