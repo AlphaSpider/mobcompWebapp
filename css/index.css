@@ -5,20 +5,28 @@ html, body{
 }
 
 #map {
-	min-height: 400px;
+	min-height: 200px;
 	height: 90%;
-	width: 	49%;
-	min-width: 400px!important;
+	width: 	70%;
+	min-width: 300px!important;
 	margin-left: auto;
 	margin-right: auto;
 }
-#compassImg {
+.compass-img {
 	width: 200px;
 	height: 200px;
 }
+.compass-img-tab {
+	width: 100%;
+	height: 100%;
+	max-width: 300px!important;
+	max-height: 300px!important;
+}
+
 #distance{
 	font-weight: bold;
 }
+
 #loadingScreen {
 	position: absolute!important;
 	width: 100%;
@@ -36,14 +44,37 @@ html, body{
 	color: red;
 }
 
+.testBox {
+	background-color: coral;
+	width: 40%;    
+	min-width: 400px;
+	float:left;
+	margin:10px;
+	border-radius:5px;
+	text-align: center;
+}
+
 .custom-distance-base-pos {
-	position: relative;
-	margin-left: auto;
-	margin-right: auto;
-	min-width: 100px;
+	background-color: coral;
+	color: black;
+	font-family: sans-serif;
+	border-radius: 5px;
+	margin-left: auto!important;
+	margin-right: auto!important;
+	margin: 10px;
+	padding: 5px;
+	min-width: 180px;
 	width: 30%;
 	text-align: center;
 }
+
+.custom-compass-base-pos {
+	width: 80%;
+	height: 40%;
+	margin-right: auto!important;
+	margin-left: auto!important;
+}
+
 
 .custom-circle{
 	position: relative;
@@ -51,15 +82,17 @@ html, body{
 	width: 200px;
 	height: 200px;
 	background: black;
-
 }
 
-.custom-compass-base-pos {
-	width: 50%;
-	height: 100px;
-	margin-right: auto!important;
-	margin-left: auto!important;
+.custom-circle-tab {
+	position: relative;
+	border-radius: 50%;
+	width: 300px;
+	height: 300px;
+	background: black;
 }
+
+
 
 .custom-compass-pos {
 	margin-left: auto;
@@ -72,7 +105,11 @@ html, body{
 	bottom: 16px!important;
 	right: 16px!important;
 	z-index: 1001!important;
-	display: inline-block!important;
+}
+
+.in-line-block {
+	display:inline-block;
+	vertical-align: top;
 }
 
 

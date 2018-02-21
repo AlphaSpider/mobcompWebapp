@@ -172,7 +172,7 @@ $("#startNavBtn").on("click", function() {
 	// 1. check if a destination is set
 	if(destMarker == null) {
 		// show alert
-		alert("Your have to set a destination on the Map.");
+		alert("You have to set a destination on the Map.");
 	} else {
 		// 2. if yes, switch to compassPage
 		$(":mobile-pagecontainer").pagecontainer("change", "#compassPage", {
@@ -221,6 +221,10 @@ function hideLoadingView() {
 
 function initNavigation() {
 	// 1. init location update
+	destLocation = {
+		lat: destMarker.getPosition().lat(),
+		lng: destMarker.getPosition().lng()
+	};
 	navigatorHandlerID = navigator.geolocation.watchPosition(updatePosition, failedPosUpdate);
 	console.log("[initNavigation]: navigatorHandlerID = " + navigatorHandlerID);
 	lastCurrLocation = currLocation;
@@ -273,6 +277,12 @@ function updatePosition(pos) {
 		// and update UI
 		endNavigation();
 		alert("Destination reached!");
+		$(":mobile-pagecontainer").pagecontainer("change", "#main", {
+			transition: 'slide',
+			changeHash: false,
+			reverse: true,
+			showLoadMsg: true
+		});
 	} else {
 		// update current distance
 		currDistance = newDist;
