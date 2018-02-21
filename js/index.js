@@ -301,7 +301,7 @@ function updatePosition(pos) {
 function updateCompass(event) {
 	if(event.originalEvent != null)
 		event = event.originalEvent;
-	var deviceOrientOffset = 90.0; // on android 0Degree is West(270 Degree) CCW
+	var deviceOrientOffset = 0.0; // on android 0Degree is West(270 Degree) CCW
 
 	// offset due to degree from north orientation to destination.
 	var baseRot = getOrientationDegrees(
@@ -338,7 +338,7 @@ function updateCompass(event) {
 		}
 	}
 	// add offset for the window orientation (+/- 90.0 deg)
-	baseRot -= window.orientation;
+	//baseRot -= window.orientation;
 	$("#compassImg").css("transform", "rotate(" + baseRot + "deg)");
 	console.log("[updateCompass]: rotation = " + baseRot
 				+ " Curr[" + currLocation.lat + "|" + currLocation.lng + "] "
